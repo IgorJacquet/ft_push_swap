@@ -6,7 +6,7 @@
 #    By: igor <igor@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/18 15:27:21 by igor              #+#    #+#              #
-#    Updated: 2021/03/24 18:01:56 by igor             ###   ########.fr        #
+#    Updated: 2021/03/29 20:57:26 by igor             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME_CHK		=	checker
 NAME_PSWP		=	push_swap
 
 CC				=	gcc
-CFLAGS			=	-Wall -Wextra -Werror -fsanitize=address
+CFLAGS			=	-Wall -Wextra -Werror #-fsanitize=address
 
 LIBFT			=	libft/libft.a
 

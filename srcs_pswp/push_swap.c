@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 14:29:53 by igor              #+#    #+#             */
-/*   Updated: 2021/03/28 05:45:55 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/30 17:03:24 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ void	ft_print_stacks(t_stacks *s)
 
 	a = 0;
 	b = 0;
-	ft_printf("\n-\t-\n");
+	ft_printf("\n------------------------\n");
 	while (a < s->size_a || b < s->size_b)
 	{
 		if (a < s->size_a)
-			ft_printf("%d\t", s->s_a[a]);
+			ft_printf("%-16d", s->s_a[a]);
 		else
-			ft_printf("\t");
+			ft_printf("                ");
 		if (b < s->size_b)
 			ft_printf("%d\n", s->s_b[b]);
 		else
@@ -51,7 +51,7 @@ void	ft_print_stacks(t_stacks *s)
 		a++;
 		b++;
 	}
-	ft_printf("-\t-\na\tb\n\n");
+	ft_printf("------------------------\nStack A         Stack B\n\n");
 }
 
 void	ft_sa(t_stacks *stacks, int i)
@@ -359,12 +359,36 @@ void	ft_handle_highest(t_stacks *s)
 		if (s->s_b[i] > s->s_b[temp])
 			temp = i;
 	i = -1;
+	if (temp == 0)
+	{
+		if (s->flag[1] && s->size_b == 1)
+			ft_pa(s, 1);
+		else
+			ft_pa(s, 0);
+		return ;
+	}
 	if (temp >= s->size_b / 2)
 		while (++i < s->size_b - temp)
 			ft_rrb(s, 1);
 	else
-		while (++i < temp)
+	{
+		while (++i < temp - 1)
 			ft_rb(s, 1);
+		if (temp > 0)
+		{
+			i = -1;
+			temp = 0;
+			while (++i <= s->size_b - 1)
+			{
+				if (s->s_b[i] > s->s_b[temp] && s->s_b[i] < s->s_b[1])
+					temp = i;
+			}
+			if (temp < s->size_b / 2)
+				ft_sb(s, 1);
+			else
+				ft_rb(s, 1);
+		}
+	}
 	if (s->flag[1] && s->size_b == 1)
 		ft_pa(s, 1);
 	else
@@ -380,7 +404,7 @@ int		ft_cmd_parser(char **argv, int argc, t_stacks *s)
 	i = -1;
 	while (++i < s->size_a)
 		s->s_a[i] = ft_atoi(argv[i + s->flag[0] + s->flag[1] + 1]);
-	if (argc > 110)
+	if (argc > 99)
 	{
 		pivot = ft_find_middle(s->s_a, s->size_a, 0.25);
 		pivot2 = ft_find_middle(s->s_a, s->size_a, 0.125);
@@ -390,20 +414,23 @@ int		ft_cmd_parser(char **argv, int argc, t_stacks *s)
 		pivot = ft_find_middle(s->s_a, s->size_a, 0.5);
 		pivot2 = ft_find_middle(s->s_a, s->size_a, 0.25);
 	}
+	if (!ft_result_check(s))
+		return (0);
 	while (ft_checkif_smaller(s->s_a, s->size_a, pivot) && s->size_a > 4)
 	{
-		if (s->s_a[0] <= pivot && ft_3_higher(s->s_a, s->size_a, s->s_a[0]) && (!ft_checkif_smaller(s->s_a, s->size_a, s->s_a[0]) || s->size_a > 4))
+		if (s->s_a[0] < pivot && ft_3_higher(s->s_a, s->size_a, s->s_a[0]) &&
+		(!ft_checkif_smaller(s->s_a, s->size_a, s->s_a[0]) || s->size_a > 4))
 			ft_pb(s);
-		if (s->s_b[0] < pivot2 && s->s_a[0] >= pivot)
+		if (s->size_b && s->s_b[0] <= pivot2 && s->s_a[0] >= pivot)
 			ft_rr(s);
-		else if (s->s_b[0] < pivot2)
+		else if (s->size_b > 1 && s->s_b[0] <= pivot2)
 			ft_rb(s, 1);
 		else if (s->s_a[0] >= pivot)
 			ft_ra(s, 1);
 	}
 	while (s->size_a > 3)
 	{
-		if (argc > 110)
+		if (argc > 99)
 		{
 			pivot = ft_find_middle(s->s_a, s->size_a, 0.25);
 			pivot2 = ft_find_middle(s->s_a, s->size_a, 0.125);
@@ -415,7 +442,7 @@ int		ft_cmd_parser(char **argv, int argc, t_stacks *s)
 		}
 		while (ft_checkif_smaller(s->s_a, s->size_a, pivot) && s->size_a > 3)
 		{
-			if (s->s_a[0] < pivot && ft_3_higher(s->s_a, s->size_a, s->s_a[0]) && (!ft_checkif_smaller(s->s_a, s->size_a, s->s_a[0]) || s->size_a > 4))
+			if (s->s_a[0] <= pivot && ft_3_higher(s->s_a, s->size_a, s->s_a[0]) && (!ft_checkif_smaller(s->s_a, s->size_a, s->s_a[0]) || s->size_a > 4))
 				ft_pb(s);
 			if (s->s_b[0] > pivot2 && (s->s_a[0] >= pivot || (ft_checkif_smaller(s->s_a, s->size_a, s->s_a[0]) && s->size_a == 4)))
 				ft_rr(s);
@@ -435,16 +462,16 @@ int		ft_cmd_parser(char **argv, int argc, t_stacks *s)
 	if (s->size_a == 3)
 	{
 		if (s->s_a[0] > s->s_a[1] && s->s_a[0] < s->s_a[2])
-			ft_sa(s, 0);
+			ft_sa(s, 1);
 		else if (s->s_a[0] > s->s_a[1] && s->s_a[1] > s->s_a[2])
 		{
-			ft_sa(s, 0);
+			ft_sa(s, 1);
 			ft_rra(s, 1);
 		}
 		else if (s->s_a[0] < s->s_a[2] && s->s_a[2] < s->s_a[1])
 		{
 			ft_rra(s, 1);
-			ft_sa(s, 0);
+			ft_sa(s, 1);
 		}
 		else if (s->s_a[0] > s->s_a[2] && s->s_a[2] > s->s_a[1])
 			ft_ra(s, 1);
@@ -483,8 +510,6 @@ int ft_argv_parse(char **argv, int argc, t_stacks *s)
 	s->flag[0] = 0;
 	s->flag[1] = 0;
 	s->size_a = -1;
-	if (argc < 3)
-		return (ft_exit_write("Error\n", 0, -1));
 	if (!ft_strncmp(argv[1], "-c", 3) || (!ft_strncmp(argv[1], "-v", 3) && !ft_strncmp(argv[2], "-c", 3)))
 	{
 		s->size_a--;

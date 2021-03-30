@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 14:41:16 by igor              #+#    #+#             */
-/*   Updated: 2021/03/27 21:41:50 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/30 04:22:40 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,23 @@ int			ft_line_reader(char ***string)
 	int		size;
 
 	size = -1;
-	r = 1;
 	str[0] = NULL;
 	str[1] = NULL;
-	while (r)
+	while ((r = get_next_line(0, &line)) >= 0)
 	{
-		if ((r = get_next_line(0, &line)) < 0)
-			return (ft_exit_write("GNL Error\n", 0, -1));
-		else if (r == 0)
-			return (size);
-		if (!(line = ft_memcat(line, "\n", ft_strlen(line), 1)))
+		if (!line[0])
+			break ;
+		if (r > 0 && !(line = ft_memcat(line, "\n", ft_strlen(line), 1)))
 			return (ft_exit_write("malloc Error\n", 0, -1));
 		if (ft_realloc(str, line, ++size) < 0)
-			return (-1);
+			return (-2);
 		str[0] = str[1];
 		*string = str[1];
 		free(line);
+		if (r == 0)
+			break ;
 	}
-	return (size);
+	return (size + 1);
 }
 
 void	ft_shift_plus(int *stack, int size)
@@ -172,35 +171,29 @@ void	ft_rrr(t_stacks *stacks)
 	ft_rra_rrb(stacks->s_b, stacks->size_b);
 }
 
-int		ft_cmd_parser(char **str, char **argv, int size, int argc, t_stacks *stacks)
+int		ft_cmd_parser(char **str, int size, t_stacks *stacks)
 {
 	int			i;
-	int 		j;
-	
+
 	i = -1;
-	while (++i < argc - 1)
-		stacks->s_a[i] = ft_atoi(argv[i + 1]);
-	for (j = 0; j < argc - 1; j++)
-		printf("%d ", stacks->s_a[j]);
-	i = -1;
-	while (++i <= size)
+	while (++i < size)
 	{
-		printf("\nCOMMANDE : %s\n", str[i]);
-		if (!ft_strncmp(str[i], "sa\n", 3))
+		//ft_printf("len %d   |   diff : %d\n", ft_strlen(str[i]), ft_strncmp(str[i], "sa\n", 3));
+		if (!ft_strncmp(str[i], "sa\n", 4))
 			ft_sa(stacks);
-		else if (!ft_strncmp(str[i], "sb\n", 3))
+		else if (!ft_strncmp(str[i], "sb\n", 4))
 			ft_sb(stacks);
-		else if (!ft_strncmp(str[i], "ss\n", 3))
+		else if (!ft_strncmp(str[i], "ss\n", 4))
 			ft_ss(stacks);
-		else if (!ft_strncmp(str[i], "pa\n", 3))
+		else if (!ft_strncmp(str[i], "pa\n", 4))
 			ft_pa(stacks);
-		else if (!ft_strncmp(str[i], "pb\n", 3))
+		else if (!ft_strncmp(str[i], "pb\n", 4))
 			ft_pb(stacks);
-		else if (!ft_strncmp(str[i], "ra\n", 3))
+		else if (!ft_strncmp(str[i], "ra\n", 4))
 			ft_ra_rb(stacks->s_a, stacks->size_a);
-		else if (!ft_strncmp(str[i], "rb\n", 3))
+		else if (!ft_strncmp(str[i], "rb\n", 4))
 			ft_ra_rb(stacks->s_b, stacks->size_b);
-		else if (!ft_strncmp(str[i], "rr\n", 3))
+		else if (!ft_strncmp(str[i], "rr\n", 4))
 			ft_rr(stacks);
 		else if (!ft_strncmp(str[i], "rra\n", 4))
 			ft_rra_rrb(stacks->s_a, stacks->size_a);
@@ -209,32 +202,8 @@ int		ft_cmd_parser(char **str, char **argv, int size, int argc, t_stacks *stacks
 		else if (!ft_strncmp(str[i], "rrr\n", 4))
 			ft_rrr(stacks);
 		else
-		{
-			write(2, "Error\n", 6);
-			return (-1);
-		}
-		for (j = 0; j < stacks->size_a; j++)
-			printf("AFTER stack a: %d\n", stacks->s_a[j]);
-		printf("\n");
-		for (j = 0; j < stacks->size_b; j++)
-			printf("AFTER stack b: %d\n", stacks->s_b[j]);
+			return (ft_exit_write("Error\n", 0, -1));
 	}
-	return (0);
-}
-
-int	ft_stacks_init(t_stacks *stacks, int argc)
-{
-	int j;
-
-	j = -1;
-	if (!(stacks->s_a = malloc(sizeof(int) * (argc + 1))))
-		return (ft_exit_write("Failed Malloc\n", 0, -1));
-	if (!(stacks->s_b = malloc(sizeof(int) * (argc + 1))))
-		return (ft_exit_write("Failed Malloc\n", 0, -1));
-	while (++j <= argc)
-		stacks->s_b[j] = 0;
-	stacks->size_a = argc - 1;
-	stacks->size_b = 0;
 	return (0);
 }
 
@@ -259,6 +228,76 @@ void	ft_result_check(t_stacks *stacks)
 	write(2, "OK\n", 3);
 }
 
+int	ft_stacks_init(t_stacks *stacks, int argc, char **argv)
+{
+	int j;
+
+	j = -1;
+	if (!(stacks->s_a = malloc(sizeof(int) * (argc + 1))))
+		return (ft_exit_write("Failed Malloc\n", 0, -1));
+	if (!(stacks->s_b = malloc(sizeof(int) * (argc + 1))))
+		return (ft_exit_write("Failed Malloc\n", 0, -1));
+	while (++j <= argc)
+		stacks->s_b[j] = 0;
+	stacks->size_a = argc - 1;
+	stacks->size_b = 0;
+	j = -1;
+	while (++j < stacks->size_a)
+		stacks->s_a[j] = ft_atoi(argv[j + 1]);
+	return (0);
+}
+
+int		ft_stacks_check(t_stacks *s, int size)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	j = -1;
+	while (++i < s->size_a)
+	{
+		while (++j < s->size_a)
+			if (s->s_a[i] == s->s_a[j] && i != j)
+				return (ft_exit_write("Error\n", 0, -2));
+		j = -1;
+	}
+	return (size);
+}
+
+int	ft_atoi_check(int n, char *num)
+{
+	int	i;
+
+	i = 0;
+	if (n < 0)
+	{
+		if (num[i] != '-')
+			return (0);
+		i++;
+	}
+	while (num[i] == '0')
+		i++;
+	if (n != 0)
+	{
+		if (num[i] != ft_abs(n) + '0')
+			return (0);
+	}
+	else if (num[i] != 0)
+			return (0);
+	return (1);
+}
+
+int	ft_isint(char *num)
+{
+	long long	n;
+
+	n = ft_atoi(num);
+	if (n > 2147483647 || n < -2147483648 || ((n == 0 || n == -1)
+	&& (!ft_atoi_check(n, num))))
+		return (0);
+	return (1);
+}
+
 int ft_argv_parse(char **argv, int argc)
 {
 	int i;
@@ -266,13 +305,15 @@ int ft_argv_parse(char **argv, int argc)
 
 	i = 0;
 	j = -1;
-	if (argc < 3)
-		return (ft_exit_write("Error\n", 0, -1));
+	if (argc == 1)
+		return (-1);
 	while (++i < argc)
 	{
 		while (argv[i][++j])
 			if (!(ft_isdigit(argv[i][j])) && argv[i][j] != '-')
 				return (ft_exit_write("Error\n", 0, -1));
+		if (!ft_isint(argv[i]))
+			return (ft_exit_write("Error\n", 0, -1));
 		j = -1;
 	}
 	return (0);
@@ -280,24 +321,23 @@ int ft_argv_parse(char **argv, int argc)
 
 int main(int argc, char **argv)
 {
-	char		**string;
-	int			size;
-	t_stacks	stacks;
-//	int i;
+	char				**string;
+	int					size;
+	t_stacks			stacks;
+	int	i;
 
+	i = -1;
 	if (ft_argv_parse(argv, argc) == -1)
 		return (-1);
     if (!(string = malloc(sizeof(char *))))
 		return (-1);
-	if ((size = ft_line_reader(&string)) < 0)
-		return(-1);
-	ft_stacks_init(&stacks, argc);
-	if (ft_cmd_parser(string, argv, size, argc, &stacks) == 0)
+	if ((size = ft_line_reader(&string)) < -1)
+		return (-1);
+	if (ft_stacks_init(&stacks, argc, argv) < 0)
+		return (-1);
+	i = ft_stacks_check(&stacks, size);
+	if (i > -2 && ft_cmd_parser(string, size, &stacks) == 0)
 		ft_result_check(&stacks);
-//	for (i = 0; i <= size; i++)
-//		printf("%s", string[i]);
-//	for (i = 0; i <= argc; i++)
-//		printf("argv : %s\n", argv[i + 1]);
 	free(stacks.s_a);
 	free(stacks.s_b);
 	while (--size >= 0)
