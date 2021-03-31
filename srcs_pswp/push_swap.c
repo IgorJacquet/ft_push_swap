@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 14:29:53 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 16:53:14 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 17:38:33 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,29 @@ int		ft_argv_parse(char **argv, int argc, t_stacks *s)
 		while (argv[i][++j])
 			if (!(ft_isdigit(argv[i][j])) && argv[i][j] != '-')
 				return (ft_exit_write("Error\n", 0, -1));
+		if (!ft_isint(argv[i]))
+			return (ft_exit_write("Error\n", 0, -1));
 		j = -1;
 		i++;
 	}
 	s->size_a += i;
+	return (0);
+}
+
+int		ft_stacks_check(t_stacks *s)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	j = -1;
+	while (++i < s->size_a)
+	{
+		while (++j < s->size_a)
+			if (s->s_a[i] == s->s_a[j] && i != j)
+				return (ft_exit_write("nError\n", 0, -1));
+		j = -1;
+	}
 	return (0);
 }
 
@@ -77,7 +96,7 @@ int		main(int argc, char **argv)
 	if (ft_argv_parse(argv, argc, &stacks) == -1)
 		return (-1);
 	ft_stacks_init(&stacks, argc);
-	if (ft_cmd_parser(argv, argc, &stacks) == 0)
+	if (ft_cmd_parser(argv, argc, &stacks, -1) == 0)
 		ft_result_check(&stacks);
 	free(stacks.s_a);
 	free(stacks.s_b);

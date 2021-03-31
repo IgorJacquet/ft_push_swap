@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 20:56:13 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 15:23:18 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 17:42:39 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@
 void	ft_shift_plus(int *stack, int size);
 void	ft_shift_minus(int *stack, int size);
 int		ft_find_middle(int *stack, int size, float index);
-int		ft_cmd_parser(char **argv, int argc, t_stacks *s);
+int		ft_cmd_parser(char **argv, int argc, t_stacks *s, int i);
 int		ft_checkif_smaller(int *s, int size, int i);
+int		ft_isint(char *num);
 
 void	ft_print_stacks(t_stacks *s, int i);
 int		ft_check_flags(char **argv, int argc, t_stacks *s, int i);
+int		ft_stacks_check(t_stacks *s);
 
 void	ft_sa(t_stacks *stacks, int i);
 void	ft_sb(t_stacks *stacks, int i);

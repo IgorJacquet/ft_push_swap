@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 23:37:39 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 16:59:40 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 17:35:06 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,15 +94,15 @@ void	ft_last_3(t_stacks *s)
 	}
 }
 
-int		ft_cmd_parser(char **argv, int argc, t_stacks *s)
+int		ft_cmd_parser(char **argv, int argc, t_stacks *s, int i)
 {
-	int	i;
 	int	pivot;
 	int	pivot2;
 
-	i = -1;
 	while (++i < s->size_a)
 		s->s_a[i] = ft_atoi(argv[i + s->flag[0] + s->flag[1] + s->flag[2] + 1]);
+	if (ft_stacks_check(s) == -1)
+		return (-1);
 	if (s->size_a == 2)
 	{
 		if (s->s_a[0] > s->s_a[1])

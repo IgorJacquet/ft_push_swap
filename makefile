@@ -6,7 +6,7 @@
 #    By: igor <igor@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/18 15:27:21 by igor              #+#    #+#              #
-#    Updated: 2021/03/31 15:43:55 by igor             ###   ########.fr        #
+#    Updated: 2021/03/31 17:40:06 by igor             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS_NAME_CHK	=	checker.c \
 
 SRCS_NAME_PSWP	=	push_swap.c \
 					utils.c \
+					utils2.c \
 					parser.c \
 					operations_swap.c \
 					operations_push.c \
