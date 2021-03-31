@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 14:29:53 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 17:38:33 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 17:49:30 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int		ft_stacks_check(t_stacks *s)
 	{
 		while (++j < s->size_a)
 			if (s->s_a[i] == s->s_a[j] && i != j)
-				return (ft_exit_write("nError\n", 0, -1));
+				return (ft_exit_write("Error\n", 0, -1));
 		j = -1;
 	}
 	return (0);
