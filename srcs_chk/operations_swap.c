@@ -1,36 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   operations_swap.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/25 17:06:00 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 00:59:55 by igor             ###   ########.fr       */
+/*   Created: 2021/03/30 21:03:06 by igor              #+#    #+#             */
+/*   Updated: 2021/03/30 21:18:58 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/checker.h"
 
-long	ft_atoi(const char *str)
+void	ft_sa(t_stacks *stacks)
 {
-	unsigned long long	nbr;
-	int					signe;
+	int	tmp;
 
-	nbr = 0;
-	signe = 1;
-	if (*str == '+' || *str == '-')
+	if (stacks->size_a > 1)
 	{
-		if (*str == '-')
-			signe *= -1;
-		str++;
+		tmp = stacks->s_a[0];
+		stacks->s_a[0] = stacks->s_a[1];
+		stacks->s_a[1] = tmp;
 	}
-	while (*str >= '0' && *str <= '9')
+}
+
+void	ft_sb(t_stacks *stacks)
+{
+	int	tmp;
+
+	if (stacks->size_b > 1)
 	{
-		nbr = nbr * 10 + *str - '0';
-		if (nbr > 9223372036854775807)
-			return ((signe + 1) / -2);
-		str++;
+		tmp = stacks->s_b[0];
+		stacks->s_b[0] = stacks->s_b[1];
+		stacks->s_b[1] = tmp;
 	}
-	return ((long)nbr * signe);
+}
+
+void	ft_ss(t_stacks *stacks)
+{
+	ft_sa(stacks);
+	ft_sb(stacks);
 }

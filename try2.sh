@@ -1,10 +1,10 @@
 moyenne=0
-ntest=200
+ntest=2000
 highest=0
 for i in `seq 1 $ntest`;
 do
 	echo "test " $i "\n"
-	export ARG=`ruby -e "puts (1..5).to_a.shuffle.join(' ')"`
+	export ARG=`ruby -e "puts (1..100).to_a.shuffle.join(' ')"`
 	val=`./push_swap $ARG | ./checker $ARG`
 	if [[ $val = 'KO' ]]
 	then
@@ -19,7 +19,7 @@ do
 		highest=$num
 		harg=$ARG
 	fi
-	if [[ $num -ge 13 ]]
+	if [[ $num -ge 700 ]]
 	then
 		break
 	fi

@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 16:12:27 by gorban            #+#    #+#             */
-/*   Updated: 2021/03/30 02:27:59 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 01:07:25 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 32
+# endif
+
+# ifndef OPEN_MAX
+#  define OPEN_MAX _SC_OPEN_MAX
 # endif
 
 void			*ft_memset(void *b, int c, size_t len);

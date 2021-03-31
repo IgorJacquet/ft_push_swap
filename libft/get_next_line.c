@@ -5,40 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/28 05:52:54 by igor              #+#    #+#             */
-/*   Updated: 2021/03/28 05:52:54 by igor             ###   ########.fr       */
+/*   Created: 2019/12/12 12:13:14 by ijacquet          #+#    #+#             */
+/*   Updated: 2021/03/31 00:16:42 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		complet_line(char **line, char (*rest)[BUFFER_SIZE + 1])
-{
-	int	a;
-	int	b_size;
-
-	a = 0;
-	b_size = 0;
-	while ((*rest)[b_size] && (*rest)[b_size] != '\n')
-		b_size++;
-	if (!(*line = ft_memcat(*line, *rest, ft_strlen(*line), b_size)))
-		return (0);
-	b_size -= -1;
-	while ((*rest)[b_size])
-	{
-		(*rest)[a] = (*rest)[b_size];
-		a -= -1;
-		b_size -= -1;
-	}
-	while ((*rest)[a])
-	{
-		(*rest)[a] = '\0';
-		a -= -1;
-	}
-	return (1);
-}
-
-int		check_line(char *line)
+static int	endl_checker(char *line)
 {
 	int	i;
 
@@ -49,52 +23,72 @@ int		check_line(char *line)
 	return (0);
 }
 
-int		reading(char (*line)[BUFFER_SIZE + 1], int fd)
+static int	ft_reader(char (*line)[BUFFER_SIZE + 1], char *buf, int fd)
 {
-	int		read_size;
-	int		i;
-	char	*buf;
+	int	len;
+	int	i;
 
-	if (!(buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-		return (-1);
 	i = 0;
-	buf[BUFFER_SIZE] = '\0';
-	read_size = read(fd, buf, BUFFER_SIZE);
-	if (read_size <= 0)
-	{
-		free(buf);
-		return (read_size);
-	}
-	while (i < read_size)
+	len = read(fd, buf, BUFFER_SIZE);
+	if (len <= 0)
+		return (len);
+	while (i < len)
 	{
 		(*line)[i] = buf[i];
 		i++;
 	}
 	(*line)[i] = '\0';
-	free(buf);
 	return (1);
 }
 
-int		get_next_line(int fd, char **line)
+static int	line_filler(char **line, char (*rest)[BUFFER_SIZE + 1])
 {
-	static char	rest[OPEN_MAX + 1][BUFFER_SIZE + 1];
+	int	a;
+	int	rest_size;
+
+	a = 0;
+	rest_size = 0;
+	while ((*rest)[rest_size] && (*rest)[rest_size] != '\n')
+		rest_size++;
+	if (!(*line = ft_memcat(*line, *rest, ft_strlen(*line), rest_size)))
+		return (0);
+	rest_size++;
+	while ((*rest)[rest_size])
+	{
+		(*rest)[a] = (*rest)[rest_size];
+		a++;
+		rest_size++;
+	}
+	while ((*rest)[a])
+	{
+		(*rest)[a] = '\0';
+		a++;
+	}
+	return (1);
+}
+
+int			get_next_line(int fd, char **line)
+{
+	static char	rest[OPEN_MAX][BUFFER_SIZE + 1];
+	char		buf[BUFFER_SIZE + 1];
 	int			r;
 
-	if (!line || fd > OPEN_MAX || fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= OPEN_MAX || BUFFER_SIZE < 1 || !line)
 		return (-1);
-	if (!(*line = malloc(sizeof(char))))
+	if (!(*line = (char *)malloc(sizeof(char))))
 		return (-1);
 	**line = '\0';
-	while (!check_line(rest[fd]))
+	while (!endl_checker(rest[fd]))
 	{
-		if (!(complet_line(line, &(rest[fd]))))
-			return (ft_freeturn(line, -1));
-		if ((r = reading(&(rest[fd]), fd)) < 0)
+		if (!line_filler(line, &rest[fd]))
+			return (-1);
+		r = ft_reader(&rest[fd], buf, fd);
+		if (r < 0)
 			return (ft_freeturn(line, -1));
 		else if (r == 0)
-			return (0);
+			return (r);
 	}
-	if (!(complet_line(line, &rest[fd])))
-		return (ft_freeturn(line, -1));
+	if (!line_filler(line, &rest[fd]))
+		return (-1);
 	return (1);
 }
