@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 23:37:39 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 07:14:31 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 16:59:40 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,14 +103,22 @@ int		ft_cmd_parser(char **argv, int argc, t_stacks *s)
 	i = -1;
 	while (++i < s->size_a)
 		s->s_a[i] = ft_atoi(argv[i + s->flag[0] + s->flag[1] + s->flag[2] + 1]);
-	ft_pivot(argc, &pivot, &pivot2, s);
-	if (!ft_result_check(s))
-		return (0);
-	ft_first_half(s, pivot, pivot2);
-	ft_morethan_3(s, argc, pivot, pivot2);
-	ft_last_3(s);
-	while (ft_result_check(s))
-		ft_handle_highest(s, 0, 0);
+	if (s->size_a == 2)
+	{
+		if (s->s_a[0] > s->s_a[1])
+			ft_sa(s, 1);
+	}
+	else
+	{
+		ft_pivot(argc, &pivot, &pivot2, s);
+		if (!ft_result_check(s))
+			return (0);
+		ft_first_half(s, pivot, pivot2);
+		ft_morethan_3(s, argc, pivot, pivot2);
+		ft_last_3(s);
+		while (ft_result_check(s))
+			ft_handle_highest(s, 0, 0);
+	}
 	ft_print_stacks(s, 1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 20:55:19 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 15:40:28 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 16:56:11 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,12 @@ int	ft_realloc(char **str[2], char *new, int size)
 	return (4219);
 }
 
-int	ft_line_reader(char ***string)
+int	ft_line_reader(char ***string, int size)
 {
 	char	*line;
 	char	**str[2];
 	int		r;
-	int		size;
 
-	size = -1;
 	str[0] = NULL;
 	str[1] = NULL;
 	while ((r = get_next_line(0, &line)) >= 0)
@@ -52,7 +50,7 @@ int	ft_line_reader(char ***string)
 			break ;
 		}
 		if (r > 0 && !(line = ft_memcat(line, "\n", ft_strlen(line), 1)))
-			return (ft_exit_write("malloc Error\n", 0, -1));
+			return (ft_exit_write("malloc Error\n", 0, -2));
 		if (ft_realloc(str, line, ++size) < 0)
 			return (-2);
 		str[0] = str[1];

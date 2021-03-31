@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 16:18:50 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 15:30:06 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 17:04:05 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdio.h>
 # include "struct.h"
 
-int		ft_line_reader(char ***string);
+int		ft_line_reader(char ***string, int size);
 
 void	ft_sa(t_stacks *stacks);
 void	ft_sb(t_stacks *stacks);

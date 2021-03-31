@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 14:29:53 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 15:11:35 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 16:53:14 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		ft_argv_parse(char **argv, int argc, t_stacks *s)
 	{
 		while (argv[i][++j])
 			if (!(ft_isdigit(argv[i][j])) && argv[i][j] != '-')
-				return (ft_exit_write("bError\n", 0, -1));
+				return (ft_exit_write("Error\n", 0, -1));
 		j = -1;
 		i++;
 	}

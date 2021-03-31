@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 14:41:16 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 15:41:14 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 16:49:53 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int		main(int argc, char **argv)
 	i = -1;
 	if (ft_argv_parse(argv, argc) == -1)
 		return (-1);
-	if ((size = ft_line_reader(&string)) < -1)
+	if ((size = ft_line_reader(&string, -1)) < -1)
 		return (-1);
 	if (ft_stacks_init(&stacks, argc, argv) < 0)
 		return (-1);
@@ -88,8 +88,10 @@ int		main(int argc, char **argv)
 		ft_result_check(&stacks);
 	free(stacks.s_a);
 	free(stacks.s_b);
+	i = size;
 	while (--size >= 0)
 		free(string[size]);
-	free(string);
+	if (i)
+		free(string);
 	return (0);
 }
