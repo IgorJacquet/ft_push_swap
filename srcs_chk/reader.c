@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 20:55:19 by igor              #+#    #+#             */
-/*   Updated: 2021/03/30 21:26:42 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 15:40:28 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ int	ft_line_reader(char ***string)
 	while ((r = get_next_line(0, &line)) >= 0)
 	{
 		if (!line[0])
+		{
+			free(line);
 			break ;
+		}
 		if (r > 0 && !(line = ft_memcat(line, "\n", ft_strlen(line), 1)))
 			return (ft_exit_write("malloc Error\n", 0, -1));
 		if (ft_realloc(str, line, ++size) < 0)

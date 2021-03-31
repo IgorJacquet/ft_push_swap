@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 23:37:39 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 06:54:37 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 07:14:31 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_pivot(int argc, int *pivot, int *pivot2, t_stacks *s)
 {
-	if (argc > 110)
+	if (argc > 99)
 	{
 		*pivot = ft_find_middle(s->s_a, s->size_a, 0.25);
 		*pivot2 = ft_find_middle(s->s_a, s->size_a, 0.125);

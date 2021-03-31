@@ -1,5 +1,5 @@
 moyenne=0
-ntest=2000
+ntest=10000
 highest=0
 for i in `seq 1 $ntest`;
 do

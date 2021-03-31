@@ -6,7 +6,7 @@
 /*   By: igor <igor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 14:29:53 by igor              #+#    #+#             */
-/*   Updated: 2021/03/31 00:57:27 by igor             ###   ########.fr       */
+/*   Updated: 2021/03/31 15:11:35 by igor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,7 @@ int		ft_argv_parse(char **argv, int argc, t_stacks *s)
 {
 	int i;
 	int j;
-	int	ret;
 
-	ret = 0;
 	j = -1;
 	s->size_a = -1;
 	s->flag[0] = 0;
